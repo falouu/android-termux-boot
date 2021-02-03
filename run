@@ -3,6 +3,6 @@
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
     cd "${HOME}/.." && rm -rf "${HOME}" && \
-    git clone https://github.com/falouu/android-termux.git "${HOME}"
+    git clone https://falouu@github.com/falouu/android-termux.git "${HOME}"
   }
 }
