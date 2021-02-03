@@ -1,1 +1,3 @@
 #!/bin/bash
+
+yes | pkg install git 
