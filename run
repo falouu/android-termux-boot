@@ -1,4 +1,8 @@
 #!/bin/bash
 
-yes | pkg install git && \
-git clone https://github.com/falouu/android-termux.git "${HOME}"
+yes | pkg install git && {
+  [[ -d "${HOME}/.git" ]] || {
+    rm -rf "${HOME}" && \
+    git clone https://github.com/falouu/android-termux.git "${HOME}"
+  }
+}
