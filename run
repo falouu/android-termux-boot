@@ -2,7 +2,7 @@
 
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
-    rm -rf "${HOME}" && \
+    cd "${HOME}/.." && rm -rf "${HOME}" && \
     git clone https://github.com/falouu/android-termux.git "${HOME}"
   }
 }
