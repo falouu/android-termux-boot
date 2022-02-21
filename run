@@ -8,7 +8,7 @@ create_key() {
   echo "Creating ssh key..." && \
   local manufacturer="$(getprop ro.product.manufacturer)" && \
   local model="$(getprop ro.product.model)" && \
-  yes | pkg install openssh && \
+  yes | pkg install openssh termux-api && \
   local key="${HOME}/.ssh/id_ed25519" && \
   rm -f "${key}" "${key}.pub" && \
   mkdir -p "${HOME}/.ssh" && \
