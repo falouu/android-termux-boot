@@ -22,9 +22,10 @@ create_key() {
   echo "Now you have to add it to GitHub" && \
   echo && \
   echo "[Press enter to open GitHub]" && \
-  read && \
+  read < /dev/tty && \
   termux-open-url 'https://github.com/settings/keys' && \
-  echo "[Press enter when done]"
+  echo "[Press enter when done]" && \
+  read < /dev/tty
 }
 
 yes | pkg install git && {
