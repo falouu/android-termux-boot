@@ -1,12 +1,21 @@
 #!/bin/bash
 
+g() {
+  GIT_TERMINAL_PROMPT=0 git "$@"
+}
+
+create_key() {
+}
+
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*" && \
     git clone https://falouu@github.com/falouu/android-termux.git "${HOME}"
   } && \
   cd "${HOME}" && \
+  g remote update origin || {
   
+  }
 
 
   # if [[ -f "${HOME}/.ssh"
