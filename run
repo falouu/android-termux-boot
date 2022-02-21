@@ -5,6 +5,8 @@ g() {
 }
 
 create_key() {
+  echo "Creating ssh key..." && \
+  ssh-keygen -t ed25519 -C "your_email@example.com"
 }
 
 yes | pkg install git && {
@@ -14,7 +16,7 @@ yes | pkg install git && {
   } && \
   cd "${HOME}" && \
   g remote update origin || {
-    echo "Fixing access to the repository" && \
+    echo "Fixing access to the repository..." && \
     create_key && \
     g remote update origin && \
     g pull
