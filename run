@@ -1,10 +1,13 @@
 #!/bin/bash
 
-set -o errexit -o pipefail
-
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*" && \
     git clone https://falouu@github.com/falouu/android-termux.git "${HOME}"
-  }
+  } && \
+  cd "${HOME}" && \
+  
+
+
+  # if [[ -f "${HOME}/.ssh"
 }
