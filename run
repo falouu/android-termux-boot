@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o errexit,pipefail
+set -o errexit -o pipefail
 
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
