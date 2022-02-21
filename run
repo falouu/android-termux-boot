@@ -12,7 +12,8 @@ create_key() {
   local key="${HOME}/.ssh/id_ed25519" && \
   rm -f "${key}" "${key}.pub" && \
   mkdir -p "${HOME}/.ssh" && \
-  yes "" | ssh-keygen -t ed25519 -C "your_email@example.com" \
+  yes "" | ssh-keygen -t ed25519 \
+    -C "${manufacturer} ${model} termux" \
     -f "${key}" -N "" && \
   termux-open-url 'https://github.com/settings/keys' && \
   
