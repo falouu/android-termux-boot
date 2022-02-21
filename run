@@ -14,6 +14,7 @@ yes | pkg install git && {
   } && \
   cd "${HOME}" && \
   g remote update origin || {
+    echo "Fixing access to the repository" && \
     create_key && \
     g remote update origin && \
     g pull
