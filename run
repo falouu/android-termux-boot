@@ -11,7 +11,9 @@ create_key() {
   rm -f "${key}" "${key}.pub" && \
   mkdir -p "${HOME}/.ssh" && \
   yes "" | ssh-keygen -t ed25519 -C "your_email@example.com" \
-    -f "${key}" -N ""
+    -f "${key}" -N "" && \
+  termux-open-url 'https://github.com/settings/keys' && \
+  
 }
 
 yes | pkg install git && {
