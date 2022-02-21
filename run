@@ -21,10 +21,9 @@ create_key() {
   echo "Now you have to add it to GitHub" && \
   echo && \
   echo "[Press enter to open GitHub]" && \
-  
-  
+  read && \
   termux-open-url 'https://github.com/settings/keys' && \
-  
+  echo "[Press enter when done]"
 }
 
 yes | pkg install git && {
@@ -36,10 +35,12 @@ yes | pkg install git && {
   g remote update origin || {
     echo "Fixing access to the repository..." && \
     create_key && \
+    echo "Checking GitHub access..." && \
     g remote update origin && \
-    g pull
-  }
-
+    g pull 
+  } && \
+  echo "GitHub configured successfully" && \
+  true
 
   # if [[ -f "${HOME}/.ssh"
 }
