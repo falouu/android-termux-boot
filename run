@@ -14,7 +14,9 @@ yes | pkg install git && {
   } && \
   cd "${HOME}" && \
   g remote update origin || {
-  
+    create_key && \
+    g remote update origin && \
+    g pull
   }
 
 
