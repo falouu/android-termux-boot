@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o errexit,pipefail
+
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*" && \
