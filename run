@@ -15,6 +15,7 @@ create_key() {
   yes "" | ssh-keygen -t ed25519 \
     -C "${manufacturer} ${model} termux" \
     -f "${key}" -N "" && \
+  termux-clipboard-set < "${key}.pub" && \
   echo && \
   echo && \
   echo "Public ssh key has been copied to clipboard." && \
