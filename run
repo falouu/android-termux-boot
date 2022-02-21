@@ -15,6 +15,14 @@ create_key() {
   yes "" | ssh-keygen -t ed25519 \
     -C "${manufacturer} ${model} termux" \
     -f "${key}" -N "" && \
+  echo && \
+  echo && \
+  echo "Public ssh key has been copied to clipboard." && \
+  echo "Now you have to add it to GitHub" && \
+  echo && \
+  echo "[Press enter to open GitHub]" && \
+  
+  
   termux-open-url 'https://github.com/settings/keys' && \
   
 }
