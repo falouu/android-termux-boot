@@ -10,7 +10,8 @@ create_key() {
   local key="${HOME}/.ssh/id_ed25519" && \
   rm -f "${key}" "${key}.pub" && \
   mkdir -p "${HOME}/.ssh" && \
-  ssh-keygen -t ed25519 -C "your_email@example.com"
+  yes "" | ssh-keygen -t ed25519 -C "your_email@example.com" \
+    -f "${key}" -N ""
 }
 
 yes | pkg install git && {
