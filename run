@@ -7,7 +7,7 @@ g() {
 create_key() {
   echo "Creating ssh key..." && \
   local manufacturer="$(getprop ro.product.manufacturer)" && \
-  local model="$()"
+  local model="$(getprop ro.product.model)" && \
   yes | pkg install openssh && \
   local key="${HOME}/.ssh/id_ed25519" && \
   rm -f "${key}" "${key}.pub" && \
