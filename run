@@ -16,11 +16,14 @@ g() {
 }
 
 test_github_conn() {
-  resp="$(ssh -T "$@" git@github.com )"
+  local resp="$(ssh -T "$@" git@github.com 2>&1 )"
+  local code=$?
+
+  
 }
 
 test_github_conn_first_time() {
-  ssh -T -o StrictHostKeyChecking=no git@github.com
+  test_github_conn -o StrictHostKeyChecking=no
 }
 
 create_key() {
