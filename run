@@ -21,7 +21,7 @@ test_github_conn() {
   local code=$?
   
   grep -qE "\b${user}\b" <<< "${resp}" && \
-    [[ $code == 0 ]] \
+    [[ $code == 1 ]] \
     && echo "SUCCESS"
     || >&2 echo "FAILED: ${resp}" && false
 }
