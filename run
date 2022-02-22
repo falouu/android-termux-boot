@@ -1,48 +1,49 @@
 #!/bin/bash
 
+set -o errexit -o pipefail
+
 g() {
   GIT_TERMINAL_PROMPT=0 git "$@"
 }
 
 create_key() {
-  echo "Creating ssh key..." && \
-  local manufacturer="$(getprop ro.product.manufacturer)" && \
-  local model="$(getprop ro.product.model)" && \
-  yes | pkg install openssh termux-api && \
-  local key="${HOME}/.ssh/id_ed25519" && \
-  rm -f "${key}" "${key}.pub" && \
-  mkdir -p "${HOME}/.ssh" && \
+  echo "Creating ssh key..."
+  local manufacturer="$(getprop ro.product.manufacturer)"
+  local model="$(getprop ro.product.model)"
+  yes | pkg install openssh termux-api
+  local key="${HOME}/.ssh/id_ed25519"
+  rm -f "${key}" "${key}.pub"
+  mkdir -p "${HOME}/.ssh"
   yes "" | ssh-keygen -t ed25519 \
     -C "${manufacturer} ${model} termux" \
-    -f "${key}" -N "" && \
-  termux-clipboard-set < "${key}.pub" && \
-  echo && \
-  echo && \
-  echo "Public ssh key has been copied to clipboard." && \
-  echo "Now you have to add it to GitHub" && \
-  echo && \
-  echo "[Press enter to open GitHub]" && \
-  read < /dev/tty && \
-  termux-open-url 'https://github.com/settings/keys' && \
-  echo "[Press enter when done]" && \
+    -f "${key}" -N ""
+  termux-clipboard-set < "${key}.pub"
+  echo
+  echo
+  echo "Public ssh key has been copied to clipboard."
+  echo "Now you have to add it to GitHub"
+  echo
+  echo "[Press enter to open GitHub]"
+  read < /dev/tty
+  termux-open-url 'https://github.com/settings/keys'
+  echo "[Press enter when done]"
   read < /dev/tty
 }
 
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
-    rm -rf "${HOME}/*" && \
+    rm -rf "${HOME}/*"
     git clone https://falouu@github.com/falouu/android-termux.git "${HOME}"
-  } && \
-  cd "${HOME}" && \
+  }
+  cd "${HOME}"
   g remote update origin || {
-    echo "Fixing access to the repository..." && \
-    create_key && \
-    echo "Checking GitHub access..." && \
-    g remote update origin && \
+    echo "Fixing access to the repository..."
+    create_key
+    echo "Checking GitHub access..."
+    g remote update origin
     g pull 
-  } && \
-  echo "GitHub configured successfully" && \
-  true
+  }
+  echo "GitHub configured successfully"
 
   # if [[ -f "${HOME}/.ssh"
 }
