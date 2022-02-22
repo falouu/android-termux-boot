@@ -2,6 +2,13 @@
 
 set -o errexit -o pipefail
 
+failure() {
+  local lineno=$1
+  local msg=$2
+  echo "FAILED at $lineno: $msg"
+}
+trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
+
 g() {
   GIT_TERMINAL_PROMPT=0 git "$@"
 }
