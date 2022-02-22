@@ -15,6 +15,14 @@ g() {
   GIT_TERMINAL_PROMPT=0 git "$@"
 }
 
+test_github_conn() {
+
+}
+
+test_github_conn_first_time() {
+
+}
+
 create_key() {
   echo "Creating ssh key..."
   local manufacturer="$(getprop ro.product.manufacturer)"
