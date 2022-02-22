@@ -16,10 +16,14 @@ g() {
 }
 
 test_github_conn() {
+  echo -n "Checking GitHub ssh access... "
   local resp="$(ssh -T "$@" git@github.com 2>&1 )"
   local code=$?
-
   
+  grep -qE "\b${user}\b" <<< "${resp}" && \
+    [[ $code == 0 ]] \
+    && echo "SUCCESS"
+    || >&2 echo "FAILED: ${resp}" && false
 }
 
 test_github_conn_first_time() {
@@ -54,7 +58,6 @@ yes | pkg install git && {
   ssh -T -o StrictHostKeyChecking=no git@github.com || {
     echo "Fixing access to the repository..."
     create_key
-    echo "Checking GitHub access..."
     ssh -T git@github.com
   }
   [[ -d "${HOME}/.git" ]] || {
