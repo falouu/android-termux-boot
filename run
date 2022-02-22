@@ -17,8 +17,9 @@ g() {
 
 test_github_conn() {
   echo -n "Checking GitHub ssh access... "
-  local resp="$(ssh -T "$@" git@github.com 2>&1 )"
-  local code=$?
+  local resp code
+  resp="$(ssh -T "$@" git@github.com 2>&1 )"
+  code=$?
   
   grep -qE "\b${user}\b" <<< "${resp}" && \
     [[ $code == 1 ]] \
