@@ -37,8 +37,6 @@ create_key() {
   read < /dev/tty
 }
 
-echo "I'm failing" && false
-
 yes | pkg install git && {
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*"
