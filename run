@@ -22,7 +22,7 @@ create_key() {
   rm -f "${key}" "${key}.pub"
   mkdir -p "${HOME}/.ssh"
   yes "" | ssh-keygen -t ed25519 \
-    -C "${manufacturer} ${model} termux" \
+    -C "${manufacturer}_${model}_termux" \
     -f "${key}" -N ""
   termux-clipboard-set < "${key}.pub"
   echo
@@ -51,6 +51,7 @@ yes | pkg install git && {
     g pull 
   }
   echo "GitHub configured successfully"
+  ./ensure
 
   # if [[ -f "${HOME}/.ssh"
 }
