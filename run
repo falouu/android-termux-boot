@@ -22,7 +22,7 @@ test_github_conn() {
   
   grep -qE "\b${user}\b" <<< "${resp}" && \
     [[ $code == 1 ]] \
-    && echo "SUCCESS"
+    && echo "SUCCESS" \
     || >&2 echo "FAILED: ${resp}" && false
 }
 
