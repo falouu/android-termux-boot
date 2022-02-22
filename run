@@ -55,10 +55,10 @@ create_key() {
 }
 
 yes | pkg install git && {
-  ssh -T -o StrictHostKeyChecking=no git@github.com || {
+  test_github_conn_first_time || {
     echo "Fixing access to the repository..."
     create_key
-    ssh -T git@github.com
+    test_github_conn
   }
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*"
