@@ -38,18 +38,19 @@ create_key() {
 }
 
 yes | pkg install git && {
+  ssh -T -o StrictHostKeyChecking=no git@github.com || {
+    echo "Fixing access to the repository..."
+    create_key
+    echo "Checking GitHub access..."
+    ssh -T git@github.com
+  }
   [[ -d "${HOME}/.git" ]] || {
     rm -rf "${HOME}/*"
     git clone https://falouu@github.com/falouu/android-termux.git "${HOME}"
   }
   cd "${HOME}"
-  g remote update origin || {
-    echo "Fixing access to the repository..."
-    create_key
-    echo "Checking GitHub access..."
-    g remote update origin
-    g pull 
-  }
+  g remote update origin
+  g pull
   echo "GitHub configured successfully"
   ./ensure
 
