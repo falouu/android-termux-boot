@@ -24,7 +24,7 @@ test_github_conn() {
   grep -qE "\b${user}\b" <<< "${resp}" && \
     [[ $code == 1 ]] \
     && echo "SUCCESS" \
-    || >&2 echo "FAILED: code: ${code}, resp: ${resp}" && false
+    || { >&2 echo "FAILED: code: ${code}, resp: ${resp}" ; false ; }
 }
 
 test_github_conn_first_time() {
