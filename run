@@ -88,6 +88,7 @@ _android_termux_boot_run() {
   source ./dev/ensurer/ensure
   local status=$?
   unset _android_termux_boot_run _android_termux_boot_create_key _android_termux_boot_test_github_conn_first_time _android_termux_boot_test_github_conn _android_termux_boot_log
+  return $status
 }
 
 _android_termux_boot_run
