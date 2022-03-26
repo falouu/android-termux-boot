@@ -15,8 +15,14 @@ g() {
   GIT_TERMINAL_PROMPT=0 git "$@"
 }
 
+log() {
+  echo
+  echo "$1"
+  echo
+}
+
 test_github_conn() {
-  echo -n "Checking GitHub ssh access... "
+  log -n "Checking GitHub ssh access... "
   local resp code
   resp="$(ssh -T "$@" git@github.com 2>&1 )" \
     && code=$? || code=$?
@@ -28,11 +34,12 @@ test_github_conn() {
 }
 
 test_github_conn_first_time() {
+  yes | pkg install openssh && \
   test_github_conn -o StrictHostKeyChecking=no
 }
 
 create_key() {
-  echo "Creating ssh key..."
+  log "Creating ssh key..."
   local manufacturer="$(getprop ro.product.manufacturer)"
   local model="$(getprop ro.product.model)"
   yes | pkg install openssh termux-api
@@ -57,7 +64,7 @@ create_key() {
 
 yes | pkg install git && {
   test_github_conn_first_time || {
-    echo "Fixing access to the repository..."
+    log "Fixing access to the repository..."
     create_key
     test_github_conn
   }
@@ -68,7 +75,7 @@ yes | pkg install git && {
   cd "${HOME}"
   g remote update origin
   g pull
-  echo "GitHub configured successfully"
+  log "GitHub configured successfully"
   ./ensure
 
   # if [[ -f "${HOME}/.ssh"
