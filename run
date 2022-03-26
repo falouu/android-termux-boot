@@ -1,27 +1,25 @@
 #!/bin/bash
 
-set -o errexit -o errtrace
+# set -o errexit -o errtrace  # don't add it - this script is sourced so it will not work
 
-user=falouu
+# failure() {
+#   local lineno=$1
+#   local msg=$2
+#   echo "FAILED at $lineno: $msg"
+# }
+# trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
 
-failure() {
-  local lineno=$1
-  local msg=$2
-  echo "FAILED at $lineno: $msg"
-}
-trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
+# g() {
+#   GIT_TERMINAL_PROMPT=0 git "$@"
+# }
 
-g() {
-  GIT_TERMINAL_PROMPT=0 git "$@"
-}
-
-log() {
+_android_termux_boot_log() {
   echo
   echo "$@"
   echo
 }
 
-test_github_conn() {
+_android_termux_boot_test_github_conn() {
   echo
   echo -n "Checking GitHub ssh access... "
   local resp code
@@ -34,54 +32,62 @@ test_github_conn() {
     || { >&2 echo "FAILED: code: ${code}, resp: ${resp}" ; false ; }
 }
 
-test_github_conn_first_time() {
-  test_github_conn -o StrictHostKeyChecking=no
+_android_termux_boot_test_github_conn_first_time() {
+  _android_termux_boot_test_github_conn -o StrictHostKeyChecking=no
 }
 
-create_key() {
-  log "Creating ssh key..."
-  local manufacturer="$(getprop ro.product.manufacturer)"
-  local model="$(getprop ro.product.model)"
-  local key="${HOME}/.ssh/id_ed25519"
-  rm -f "${key}" "${key}.pub"
-  mkdir -p "${HOME}/.ssh"
+_android_termux_boot_create_key() {
+  _android_termux_boot_log "Creating ssh key..." && \
+  local manufacturer="$(getprop ro.product.manufacturer)" && \
+  local model="$(getprop ro.product.model)" && \
+  local key="${HOME}/.ssh/id_ed25519" && \
+  rm -f "${key}" "${key}.pub" && \
+  mkdir -p "${HOME}/.ssh" && \
   yes "" | ssh-keygen -t ed25519 \
     -C "${manufacturer}_${model}_termux" \
-    -f "${key}" -N ""
-  termux-clipboard-set < "${key}.pub"
-  echo
-  echo
-  echo "Public ssh key has been copied to clipboard."
-  echo "Now you have to add it to GitHub"
-  echo
-  echo "[Press enter to open GitHub]"
+    -f "${key}" -N "" && \
+  termux-clipboard-set < "${key}.pub" && \
+  echo && \
+  echo && \
+  echo "Public ssh key has been copied to clipboard." && \
+  echo "Now you have to add it to GitHub" && \
+  echo && \
+  echo "[Press enter to open GitHub]" && \
+  read < /dev/tty && \
+  termux-open-url 'https://github.com/settings/keys' && \
+  echo "[Press enter when done]" && \
   read < /dev/tty
-  termux-open-url 'https://github.com/settings/keys'
-  echo "[Press enter when done]"
-  read < /dev/tty
 }
 
-yes | pkg install git openssh termux-api
-yes | pkg upgrade
-test_github_conn_first_time || {
-  log "Fixing access to the repository..."
-  create_key
-  test_github_conn
-}
-cd "${HOME}"
-[[ -d "${HOME}/.git" ]] || {
-  rm -rf "${HOME}/*" 
-  rm -rf "${HOME}/.termux" 
+_android_termux_boot_run() {
+  local user=falouu
 
-  git init -b main 
-  git remote add origin git@github.com:falouu/android-termux.git
-  git remote update
-  git checkout -f main
-  
-  log "GitHub configured successfully"
-  # if [[ -f "${HOME}/.ssh"
+  yes | pkg install git openssh termux-api && \
+  yes | pkg upgrade && \
+  if ! _android_termux_boot_test_github_conn_first_time; then 
+    _android_termux_boot_log "Fixing access to the repository..."
+    _android_termux_boot_create_key
+    _android_termux_boot_test_github_conn
+  fi && \
+  cd "${HOME}" && \
+  if ! [[ -d "${HOME}/.git" ]]; then
+    rm -rf "${HOME}/*" && \
+    rm -rf "${HOME}/.termux" && \
+    \
+    git init -b main && \
+    git remote add origin git@github.com:falouu/android-termux.git && \
+    git remote update && \
+    git checkout -f main && \
+    \
+    _android_termux_boot_log "GitHub configured successfully"
+    # if [[ -f "${HOME}/.ssh"
+  fi && \
+  \
+  git pull && \
+  ENSURE_RELOAD_SHELL=1 && \
+  source ./dev/ensurer/ensure
+  local status=$?
+  unset _android_termux_boot_run _android_termux_boot_create_key _android_termux_boot_test_github_conn_first_time _android_termux_boot_test_github_conn _android_termux_boot_log
 }
 
-git pull
-ENSURE_RELOAD_SHELL=1 
-source ./dev/ensurer/ensure
+_android_termux_boot_run
