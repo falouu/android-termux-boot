@@ -68,19 +68,20 @@ test_github_conn_first_time || {
   create_key
   test_github_conn
 }
+cd "${HOME}"
 [[ -d "${HOME}/.git" ]] || {
   rm -rf "${HOME}/*" 
   rm -rf "${HOME}/.termux" 
 
-  cd "${HOME}"
   git init -b main 
   git remote add origin git@github.com:falouu/android-termux.git
   git remote update
   git checkout -f main
-  g pull
-  log "GitHub configured successfully"
   
-  ./ensure
-
+  log "GitHub configured successfully"
   # if [[ -f "${HOME}/.ssh"
 }
+
+git pull
+ENSURE_RELOAD_SHELL=1 
+source ./dev/ensurer/ensure
